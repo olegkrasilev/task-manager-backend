@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  lint-test-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js version from .nvmrc
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check code format (Prettier)
+        run: npx prettier --check "src/**/*.ts" "test/**/*.ts"
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Build the project
+        run: npm run build
+
+      - name: Run unit tests with coverage
+        run: npm run test:cov
+
+      - name: Run e2e tests
+        run: npm run test:e2e
