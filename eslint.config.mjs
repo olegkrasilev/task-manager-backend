@@ -65,6 +65,7 @@ export default tseslint.config(
       'n/no-unpublished-import': 'off',
       'unicorn/prefer-top-level-await': 'off',
       'unicorn/prevent-abbreviations': 'off',
+      'unicorn/import-style': 'off',
       'import/order': [
         'warn',
         {
