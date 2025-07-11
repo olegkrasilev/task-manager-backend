@@ -1,10 +1,9 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { LoggerService } from 'src/logger/logger.service';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { LoggerService } from './logger/logger.service';
 import appConfig from './shared/config/app.config';
 import { envSchema } from './shared/validation/env.schema';
 
