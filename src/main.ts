@@ -4,12 +4,14 @@ import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
 import { AppConfig } from './shared/config/app.config';
+import { HttpExceptionFilter } from './shared/filter/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('Bootstrap');
   const configService = app.get(ConfigService);
   const appConfig = configService.get<AppConfig>('app');
+  app.useGlobalFilters(new HttpExceptionFilter(configService));
   if (!appConfig) {
     logger.error(`Error loading app config`);
     throw new Error('Error loading app config');
