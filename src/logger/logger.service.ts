@@ -7,17 +7,28 @@ import 'winston-daily-rotate-file';
 function isString(value: unknown): value is string {
   return typeof value === 'string';
 }
+
 @Injectable()
 export class LoggerService {
   private logger: winston.Logger;
 
   constructor() {
-    const transport = new winston.transports.DailyRotateFile({
-      dirname: path.join('logs'),
+    const infoTransport = new winston.transports.DailyRotateFile({
+      dirname: path.join('logs', 'info'),
       filename: '%DATE%',
       datePattern: 'YYYY/MM/DD',
       maxFiles: '14d',
       zippedArchive: false,
+      level: 'info',
+    });
+
+    const errorTransport = new winston.transports.DailyRotateFile({
+      dirname: path.join('logs', 'errors'),
+      filename: '%DATE%',
+      datePattern: 'YYYY/MM/DD',
+      maxFiles: '30d',
+      zippedArchive: false,
+      level: 'error',
     });
 
     this.logger = winston.createLogger({
@@ -33,7 +44,8 @@ export class LoggerService {
         }),
       ),
       transports: [
-        transport,
+        infoTransport,
+        errorTransport,
         new winston.transports.Console({
           format: winston.format.combine(
             winston.format.timestamp(),
@@ -54,7 +66,7 @@ export class LoggerService {
     this.logger.info(message);
   }
 
-  error(message: string) {
+  error<T>(message: T) {
     this.logger.error(message);
   }
 }
