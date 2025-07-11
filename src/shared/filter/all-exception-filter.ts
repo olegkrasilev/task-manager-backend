@@ -9,7 +9,7 @@ import {
 // eslint-disable-next-line n/no-extraneous-import
 import { Request, Response } from 'express';
 
-import { LoggerService } from 'src/logger/logger.service';
+import { LoggerService } from '../../logger/logger.service';
 
 @Catch()
 @Injectable()
