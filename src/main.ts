@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 
@@ -16,6 +16,14 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter(configService));
   const loggerService = app.get(LoggerService);
   app.useGlobalInterceptors(new LoggingInterceptor(loggerService));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      forbidUnknownValues: true,
+    }),
+  );
 
   if (!appConfig) {
     logger.error(`Error loading app config`);
