@@ -15,7 +15,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('Bootstrap');
   const configService = app.get(ConfigService);
-  const appConfig = configService.get<AppConfig>('app');
+  const appConfig = configService.get<AppConfig>('appConfig');
   app.useGlobalFilters(new HttpExceptionFilter(configService));
   const loggerService = app.get(LoggerService);
   app.useGlobalInterceptors(new LoggingInterceptor(loggerService));
