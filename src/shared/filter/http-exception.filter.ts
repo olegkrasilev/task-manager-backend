@@ -18,8 +18,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
     const isDev = this.configService.get<string>('NODE_ENV') === 'dev';
     const isProd = this.configService.get<string>('NODE_ENV') === 'prod';
+    const isTest = this.configService.get<string>('NODE_ENV') === 'test';
 
-    if (isDev) {
+    if (isDev || isTest) {
       response.status(status).json({
         statusCode: status,
         timestamp: new Date().toISOString(),
