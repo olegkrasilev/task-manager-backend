@@ -1,11 +1,13 @@
 import { Logger, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerService } from './logger/logger.service';
 import appConfig from './shared/config/app.config';
+import { getTypeOrmConfig } from './shared/config/database.config';
 import { AllExceptionsFilter } from './shared/filter/all-exception-filter';
 import { envSchema } from './shared/validation/env.schema';
 
@@ -29,6 +31,10 @@ const logger = new Logger('ConfigModule');
         logger.log('Env validation passed');
         return parsed.data;
       },
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: getTypeOrmConfig,
     }),
   ],
   controllers: [AppController],

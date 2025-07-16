@@ -5,7 +5,7 @@ import { envSchema } from '../validation/env.schema';
 
 export type AppConfig = z.infer<typeof envSchema>;
 
-export default registerAs('app', (): AppConfig => {
+export default registerAs('appConfig', (): AppConfig => {
   const parsed = envSchema.safeParse(process.env);
   if (!parsed.success) {
     console.error('❌ Invalid environment variables');
