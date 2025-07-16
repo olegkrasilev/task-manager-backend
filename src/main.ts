@@ -1,6 +1,9 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+// eslint-disable-next-line n/no-extraneous-import
+import { json, urlencoded } from 'express';
+import helmet from 'helmet';
 
 import { AppModule } from './app.module';
 import { LoggerService } from './logger/logger.service';
@@ -16,6 +19,9 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter(configService));
   const loggerService = app.get(LoggerService);
   app.useGlobalInterceptors(new LoggingInterceptor(loggerService));
+  app.use(helmet());
+  app.use(json({ limit: '100kb' }));
+  app.use(urlencoded({ extended: true, limit: '100kb' }));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
